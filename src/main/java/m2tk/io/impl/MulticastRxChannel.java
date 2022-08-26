@@ -149,8 +149,7 @@ final class MulticastRxChannel implements RxChannel
         int toRead = length;
         while (toRead > 0)
         {
-            if (!receive())
-                break;
+            receive();
 
             int n = read0(buffer, offset, toRead);
             toRead -= n;
@@ -172,14 +171,13 @@ final class MulticastRxChannel implements RxChannel
         return available;
     }
 
-    private boolean receive() throws IOException
+    private void receive() throws IOException
     {
         if (packet.getLength() > packetReadOffset)
-            return true; // 还有缓存的数据，直接返回
+            return; // 还有缓存的数据，直接返回
 
-        socket.receive(packet);
+        socket.receive(packet); // 这里是阻塞调用，除非超时或被中断。
         packetReadOffset = 0;
-        return true;
     }
 
     @Override
