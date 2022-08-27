@@ -22,7 +22,6 @@ import m2tk.io.TxChannel;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.util.Objects;
 
 public final class FileProtocol implements Protocol
@@ -31,33 +30,20 @@ public final class FileProtocol implements Protocol
     public boolean accepts(String resource)
     {
         Objects.requireNonNull(resource, "resource should not be null");
-
-        URI uri = URI.create(resource);
-        String scheme = uri.getScheme();
-        String path = uri.getPath();
-
-        return scheme != null &&
-               scheme.equalsIgnoreCase("file") &&
-               path != null &&
-               path.length() > 1;
+        // 文件路径在创建通道时再进行判断，不再要求必须符合URI格式。
+        return true;
     }
 
     @Override
     public RxChannel openRxChannel(String resource) throws IOException
     {
-        if (!accepts(resource))
-            throw new IllegalArgumentException("Unsupported resource: " + resource);
-
-        return new FileRxChannel(new File(URI.create(resource)));
+        return new FileRxChannel(new File(resource));
     }
 
     @Override
     public TxChannel openTxChannel(String resource) throws IOException
     {
-        if (!accepts(resource))
-            throw new IllegalArgumentException("Unsupported resource: " + resource);
-
-        return new FileTxChannel(new File(URI.create(resource)));
+        return new FileTxChannel(new File(resource));
     }
 
     @Override

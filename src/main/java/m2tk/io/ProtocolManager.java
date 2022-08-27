@@ -16,7 +16,6 @@
 
 package m2tk.io;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -43,7 +42,7 @@ public final class ProtocolManager
     {
     }
 
-    public static RxChannel openRxChannel(String resource) throws IOException
+    public static RxChannel openRxChannel(String resource)
     {
         Objects.requireNonNull(resource, "resource should not be null");
 
@@ -55,7 +54,6 @@ public final class ProtocolManager
                     return protocol.openRxChannel(resource);
             } catch (Exception ignored)
             {
-                ignored.printStackTrace(System.out);
                 // ignored
             }
         }
@@ -63,7 +61,7 @@ public final class ProtocolManager
         throw new IllegalArgumentException("No suitable protocol accepts " + resource);
     }
 
-    public static TxChannel openTxChannel(String resource) throws IOException
+    public static TxChannel openTxChannel(String resource)
     {
         Objects.requireNonNull(resource, "resource should not be null");
 

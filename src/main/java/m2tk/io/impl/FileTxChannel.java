@@ -38,7 +38,7 @@ final class FileTxChannel implements TxChannel
         file = new RandomAccessFile(f, "rw");
         file.setLength(0);
         bitrate = -1;
-        limit = 100 * 1024 * 1024L; // 100MB
+        limit = 1024 * 1024 * 1024L; // 1GB
         buf = new byte[188 * 100]; // 缓存小反而能减少等待时间
         resetBuffer();
     }
