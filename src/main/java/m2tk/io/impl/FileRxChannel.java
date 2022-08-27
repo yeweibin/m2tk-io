@@ -22,8 +22,6 @@ import java.io.EOFException;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.net.URI;
-import java.util.Objects;
 
 final class FileRxChannel implements RxChannel
 {
@@ -35,7 +33,7 @@ final class FileRxChannel implements RxChannel
     FileRxChannel(File f) throws IOException
     {
         file = new RandomAccessFile(f, "r");
-        filename = f.getName();
+        filename = f.getAbsolutePath();
         closed = false;
         rewindEnabled = false;
     }
@@ -43,7 +41,7 @@ final class FileRxChannel implements RxChannel
     @Override
     public boolean hasProperty(String property)
     {
-        return Objects.equals(property, "source name");
+        return "source name".equals(property);
     }
 
     @Override
@@ -55,28 +53,23 @@ final class FileRxChannel implements RxChannel
     @Override
     public Object query(String property)
     {
-        switch (property)
-        {
-            case "source name":
-                return filename;
-            default:
-                return null;
-        }
+        if ("source name".equals(property))
+            return filename;
+        return null;
     }
 
     @Override
     public boolean hasCommand(String command)
     {
-        return Objects.equals(command, "sync") ||
-               Objects.equals(command, "rewind");
+        return "sync".equals(command) || "rewind".equals(command);
     }
 
     @Override
     public void control(String command, Object... arguments) throws IOException
     {
-        if (Objects.equals(command, "sync"))
+        if ("sync".equals(command))
             doSync();
-        if (Objects.equals(command, "rewind"))
+        if ("rewind".equals(command))
             doSetRewind(arguments);
     }
 

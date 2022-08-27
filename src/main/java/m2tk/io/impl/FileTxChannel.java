@@ -22,7 +22,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Arrays;
-import java.util.Objects;
 
 final class FileTxChannel implements TxChannel
 {
@@ -46,8 +45,7 @@ final class FileTxChannel implements TxChannel
     @Override
     public boolean hasCommand(String command)
     {
-        return Objects.equals(command, "bitrate") ||
-               Objects.equals(command, "limit");
+        return "bitrate".equals(command) || "limit".equals(command);
     }
 
     @Override
@@ -59,9 +57,9 @@ final class FileTxChannel implements TxChannel
     @Override
     public void control(String command, Object... arguments)
     {
-        if (Objects.equals(command, "bitrate"))
+        if ("bitrate".equals(command))
             doSetBitrate(arguments);
-        if (Objects.equals(command, "limit"))
+        if ("limit".equals(command))
             doSetLimit(arguments);
     }
 
@@ -197,9 +195,9 @@ final class FileTxChannel implements TxChannel
             buf[i] = 0x47;
             buf[i+1] = 0b00011111;
             buf[i+2] = (byte) 0b11111111;
-            buf[i+3] = 0b00011111;  // scrambling_control: '00'
-                                    // adaptation_field_control: '01'
-                                    // continuity_counter: '1111'
+            buf[i+3] = 0b00011111;  // scrambling_control: 00
+                                    // adaptation_field_control: 01
+                                    // continuity_counter: 1111
         }
         buffered = 0;
     }

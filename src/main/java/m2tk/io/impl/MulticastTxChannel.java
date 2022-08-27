@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.net.*;
 import java.util.Arrays;
 import java.util.Enumeration;
-import java.util.Objects;
 
 final class MulticastTxChannel implements TxChannel
 {
@@ -43,9 +42,9 @@ final class MulticastTxChannel implements TxChannel
         NULL_PACKET[0] = 0x47;
         NULL_PACKET[1] = 0b00011111;
         NULL_PACKET[2] = (byte) 0b11111111;
-        NULL_PACKET[3] = 0b00011111;  // scrambling_control: '00'
-                                      // adaptation_field_control: '01'
-                                      // continuity_counter: '1111'
+        NULL_PACKET[3] = 0b00011111;  // scrambling_control: 00
+                                      // adaptation_field_control: 01
+                                      // continuity_counter: 1111
     }
 
     MulticastTxChannel(String address, Integer port) throws IOException
@@ -81,7 +80,7 @@ final class MulticastTxChannel implements TxChannel
     @Override
     public boolean hasCommand(String command)
     {
-        return Objects.equals(command, "bitrate");
+        return "bitrate".equals(command);
     }
 
     @Override
@@ -93,7 +92,7 @@ final class MulticastTxChannel implements TxChannel
     @Override
     public void control(String command, Object... arguments)
     {
-        if (Objects.equals(command, "bitrate"))
+        if ("bitrate".equals(command))
             doSetBitrate(arguments);
     }
 

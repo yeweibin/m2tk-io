@@ -21,7 +21,6 @@ import m2tk.io.RxChannel;
 import java.io.IOException;
 import java.net.*;
 import java.util.Enumeration;
-import java.util.Objects;
 
 final class MulticastRxChannel implements RxChannel
 {
@@ -70,8 +69,7 @@ final class MulticastRxChannel implements RxChannel
     @Override
     public boolean hasProperty(String property)
     {
-        return Objects.equals(property, "source name") ||
-               Objects.equals(property, "timeout");
+        return "source name".equals(property) || "timeout".equals(property);
     }
 
     @Override
@@ -83,21 +81,17 @@ final class MulticastRxChannel implements RxChannel
     @Override
     public Object query(String property)
     {
-        switch (property)
-        {
-            case "source name":
-                return uri;
-            case "timeout":
-                return timeout;
-            default:
-                return null;
-        }
+        if ("source name".equals(property))
+            return uri;
+        if ("timeout".equals(property))
+            return timeout;
+        return null;
     }
 
     @Override
     public boolean hasCommand(String command)
     {
-        return Objects.equals(command, "timeout");
+        return "timeout".equals(command);
     }
 
     @Override
@@ -109,7 +103,7 @@ final class MulticastRxChannel implements RxChannel
     @Override
     public void control(String command, Object... arguments) throws IOException
     {
-        if (Objects.equals(command, "timeout"))
+        if ("timeout".equals(command))
             doSetTimeout(arguments);
     }
 

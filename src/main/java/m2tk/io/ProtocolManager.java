@@ -58,12 +58,12 @@ public final class ProtocolManager
             }
         }
 
-        throw new IllegalArgumentException("No suitable protocol accepts " + resource);
+        throw new IllegalArgumentException(String.format("当前没有协议能为资源[%s]创建输入通道。", resource));
     }
 
     public static TxChannel openTxChannel(String resource)
     {
-        Objects.requireNonNull(resource, "resource should not be null");
+        Objects.requireNonNull(resource);
 
         for (Protocol protocol : PROTOCOLS)
         {
@@ -77,12 +77,12 @@ public final class ProtocolManager
             }
         }
 
-        throw new IllegalArgumentException("No suitable protocol accepts " + resource);
+        throw new IllegalArgumentException(String.format("当前没有协议能为资源[%s]创建输出通道。", resource));
     }
 
     public static Protocol getProtocol(String resource)
     {
-        Objects.requireNonNull(resource, "resource should not be null");
+        Objects.requireNonNull(resource);
 
         for (Protocol protocol : PROTOCOLS)
         {
@@ -96,6 +96,6 @@ public final class ProtocolManager
             }
         }
 
-        throw new IllegalArgumentException("No suitable protocol accepts " + resource);
+        throw new IllegalArgumentException(String.format("当前没有协议认可资源[%s]", resource));
     }
 }
