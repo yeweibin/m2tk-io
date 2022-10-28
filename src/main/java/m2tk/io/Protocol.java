@@ -18,13 +18,16 @@ package m2tk.io;
 
 import java.io.IOException;
 
+/**
+ * MPEG-IO协议
+ */
 public interface Protocol extends Queryable
 {
     /**
      * 查询当前协议是否支持流通道资源描述。
      *
      * @param resource 流通道资源描述（格式由实现决定）
-     * @return 支持，返回<tt>true</tt>；不支持，返回<tt>false</tt>。
+     * @return 支持，返回<code>true</code>；不支持，返回<code>false</code>。
      */
     boolean accepts(String resource);
 

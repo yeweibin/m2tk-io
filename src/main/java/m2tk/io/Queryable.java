@@ -16,6 +16,9 @@
 
 package m2tk.io;
 
+/**
+ * 属性查询接口
+ */
 public interface Queryable
 {
     /**

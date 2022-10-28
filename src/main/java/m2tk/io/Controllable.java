@@ -18,6 +18,9 @@ package m2tk.io;
 
 import java.io.IOException;
 
+/**
+ * 受控对象接口
+ */
 public interface Controllable
 {
     /**
@@ -46,6 +49,7 @@ public interface Controllable
      *
      * @param command 指令
      * @param arguments 参数
+     * @throws IOException IO异常
      */
     default void control(String command, Object... arguments) throws IOException
     {

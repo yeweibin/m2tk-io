@@ -19,7 +19,19 @@ package m2tk.io;
 import java.io.Closeable;
 import java.io.IOException;
 
+/**
+ * 输入通道
+ */
 public interface RxChannel extends Closeable, Controllable, Queryable
 {
+    /**
+     * 读取通道数据
+     *
+     * @param buffer 结果缓冲区
+     * @param offset 缓冲区写入位置的偏移量
+     * @param length 期望读取的长度
+     * @return 实际读取的长度
+     * @throws IOException IO异常
+     */
     int read(byte[] buffer, int offset, int length) throws IOException;
 }
