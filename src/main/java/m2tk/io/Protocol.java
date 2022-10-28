@@ -18,6 +18,9 @@ package m2tk.io;
 
 import java.io.IOException;
 
+/**
+ * MPEG-IO协议
+ */
 public interface Protocol extends Queryable
 {
     /**

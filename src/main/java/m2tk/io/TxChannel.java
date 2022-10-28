@@ -19,7 +19,18 @@ package m2tk.io;
 import java.io.Closeable;
 import java.io.IOException;
 
+/**
+ * 输出通道
+ */
 public interface TxChannel extends Closeable, Controllable, Queryable
 {
+    /**
+     * 向通道写入数据
+     *
+     * @param bytes 数据缓冲区
+     * @param offset 位置偏移量
+     * @param length 数据长度
+     * @throws IOException IO异常
+     */
     void write(byte[] bytes, int offset, int length) throws IOException;
 }
