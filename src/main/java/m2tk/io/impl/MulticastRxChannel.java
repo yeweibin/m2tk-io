@@ -63,7 +63,7 @@ final class MulticastRxChannel implements RxChannel
         timeout = 30000; // 30s
         packetReadOffset = BUFFER_SIZE;
         socket.setSoTimeout(timeout);
-        socket.setReceiveBufferSize(10 * 1024 * 1024); // 10MB缓存，以应对高码率的流，减少丢包的概率。
+        socket.setReceiveBufferSize(10 * 1024 * 1024); // 10MB缓存，以应对高码率输入，减少丢包概率。
     }
 
     @Override

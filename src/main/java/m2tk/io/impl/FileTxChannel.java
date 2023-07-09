@@ -51,7 +51,7 @@ final class FileTxChannel implements TxChannel
     @Override
     public String[] getCommandList()
     {
-        return new String[]{"bitrate","limit"};
+        return new String[]{"bitrate", "limit"};
     }
 
     @Override
@@ -189,15 +189,15 @@ final class FileTxChannel implements TxChannel
 
     private void resetBuffer()
     {
-        Arrays.fill(buf, (byte)0xFF);
+        Arrays.fill(buf, (byte) 0xFF);
         for (int i = 0; i < buf.length; i += 188)
         {
-            buf[i] = 0x47;
-            buf[i+1] = 0b00011111;
-            buf[i+2] = (byte) 0b11111111;
-            buf[i+3] = 0b00011111;  // scrambling_control: 00
-                                    // adaptation_field_control: 01
-                                    // continuity_counter: 1111
+            buf[i    ] = 0x47;
+            buf[i + 1] = 0x1F;
+            buf[i + 2] = (byte) 0xFF;
+            buf[i + 3] = 0x1F;  // scrambling_control: 00
+                                // adaptation_field_control: 01
+                                // continuity_counter: 1111
         }
         buffered = 0;
     }
