@@ -36,15 +36,16 @@ final class MulticastTxChannel implements TxChannel
     private int buffered;
     private long lastTimePoint;
     private static final byte[] NULL_PACKET = new byte[188];
+
     static
     {
-        Arrays.fill(NULL_PACKET, (byte)0xFF);
+        Arrays.fill(NULL_PACKET, (byte) 0xFF);
         NULL_PACKET[0] = 0x47;
-        NULL_PACKET[1] = 0b00011111;
-        NULL_PACKET[2] = (byte) 0b11111111;
-        NULL_PACKET[3] = 0b00011111;  // scrambling_control: 00
-                                      // adaptation_field_control: 01
-                                      // continuity_counter: 1111
+        NULL_PACKET[1] = 0x1F;
+        NULL_PACKET[2] = (byte) 0xFF;
+        NULL_PACKET[3] = 0x1F;  // scrambling_control: 00
+                                // adaptation_field_control: 01
+                                // continuity_counter: 1111
     }
 
     MulticastTxChannel(String address, Integer port) throws IOException
@@ -184,7 +185,7 @@ final class MulticastTxChannel implements TxChannel
 
             offset += blockSize;
             buffered -= blockSize;
-            packetCount ++;
+            packetCount++;
         }
 
         resetBuffer();

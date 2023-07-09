@@ -27,8 +27,8 @@ final class FileRxChannel implements RxChannel
 {
     private final RandomAccessFile file;
     private final String filename;
-    private volatile boolean closed;
-    private volatile boolean rewindEnabled;
+    private boolean closed;
+    private boolean rewindEnabled;
 
     FileRxChannel(File f) throws IOException
     {
@@ -93,7 +93,7 @@ final class FileRxChannel implements RxChannel
     }
 
     @Override
-    public synchronized void close() throws IOException
+    public void close() throws IOException
     {
         if (!closed)
         {
