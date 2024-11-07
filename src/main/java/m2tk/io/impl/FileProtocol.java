@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Ye Weibin. All rights reserved.
+ * Copyright (c) M2TK Project. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,14 +22,12 @@ import m2tk.io.TxChannel;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Objects;
 
 public final class FileProtocol implements Protocol
 {
     @Override
     public boolean accepts(String resource)
     {
-        Objects.requireNonNull(resource, "resource should not be null");
         // 文件路径在创建通道时再进行判断，不再要求必须符合URI格式。
         return true;
     }

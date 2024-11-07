@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Ye Weibin. All rights reserved.
+ * Copyright (c) M2TK Project. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,10 +67,10 @@ final class FileTxChannel implements TxChannel
     public void write(byte[] bytes, int offset, int length) throws IOException
     {
         if (offset < 0 || bytes.length - offset < length)
-            throw new IllegalArgumentException("Invalid offset: " + offset);
+            throw new IllegalArgumentException("无效的偏移量：" + offset);
 
         if (length % 188 != 0)
-            throw new IllegalArgumentException("Invalid length: " + length + ", must be multiple of 188 bytes.");
+            throw new IllegalArgumentException("数据长度必须为188字节的整数倍");
 
         while (length > 0)
         {
@@ -92,8 +92,8 @@ final class FileTxChannel implements TxChannel
 
     private void doSetBitrate(Object[] arguments)
     {
-        if (arguments.length != 1)
-            throw new IllegalArgumentException("Command 'bitrate' requires one argument: [bitrate]");
+        if (arguments.length == 0)
+            throw new IllegalArgumentException("缺少必要参数");
 
         Object arg = arguments[0];
         int value = -1;
@@ -104,14 +104,15 @@ final class FileTxChannel implements TxChannel
         if (arg instanceof String)
             value = Integer.parseInt((String) arg);
 
-        if (value > 0)
-            bitrate = value;
+        if (value <= 0)
+            throw new IllegalArgumentException("无效比特率：" + arg);
+        bitrate = value;
     }
 
     private void doSetLimit(Object[] arguments)
     {
-        if (arguments.length != 1)
-            throw new IllegalArgumentException("Command 'limit' requires one argument: [limit], unit: MB");
+        if (arguments.length == 0)
+            throw new IllegalArgumentException("缺少必要参数");
 
         Object arg = arguments[0];
         long value = 0;
@@ -123,7 +124,7 @@ final class FileTxChannel implements TxChannel
             value = Long.parseLong((String) arg);
 
         if (value < 1)
-            throw new IllegalArgumentException("Bad limit value: " + arg);
+            throw new IllegalArgumentException("无效参数：" + arg);
 
         value = Math.max(value, 100);
         limit = value * 1024 * 1024;

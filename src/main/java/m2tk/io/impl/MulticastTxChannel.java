@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Ye Weibin. All rights reserved.
+ * Copyright (c) M2TK Project. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,7 +64,7 @@ final class MulticastTxChannel implements TxChannel
             }
         }
         if (usableInterface == null)
-            throw new IllegalArgumentException("No usable network interface");
+            throw new IllegalArgumentException("没有可用的网络接口");
 
         socketAddress = new InetSocketAddress(address, port);
         networkInterface = usableInterface;
@@ -101,13 +101,13 @@ final class MulticastTxChannel implements TxChannel
     public void write(byte[] bytes, int offset, int length) throws IOException
     {
         if (socket.isClosed())
-            throw new IOException("Channel closed");
+            throw new IOException("通道已关闭");
 
         if (offset < 0 || bytes.length - offset < length)
-            throw new IllegalArgumentException("Invalid offset: " + offset);
+            throw new IllegalArgumentException("无效的偏移量：" + offset);
 
         if (length % 188 != 0)
-            throw new IllegalArgumentException("Invalid length: " + length + ", must be multiple of 188 bytes.");
+            throw new IllegalArgumentException("数据长度必须为188字节的整数倍");
 
         while (length > 0)
         {
@@ -132,11 +132,11 @@ final class MulticastTxChannel implements TxChannel
 
     private void doSetBitrate(Object[] arguments)
     {
-        if (arguments.length != 1)
-            throw new IllegalArgumentException("Command 'bitrate' requires one argument: [bitrate]");
+        if (arguments.length == 0)
+            throw new IllegalArgumentException("缺少必要参数");
 
         Object arg = arguments[0];
-        int value = 0;
+        int value = -1;
         if (arg instanceof Integer)
             value = (int) arg;
         if (arg instanceof Long)
@@ -144,8 +144,8 @@ final class MulticastTxChannel implements TxChannel
         if (arg instanceof String)
             value = Integer.parseInt((String) arg);
 
-        if (value == 0)
-            throw new IllegalArgumentException("Bad bitrate value: " + arg);
+        if (value <= 0)
+            throw new IllegalArgumentException("无效比特率：" + arg);
         bitrate = value;
     }
 

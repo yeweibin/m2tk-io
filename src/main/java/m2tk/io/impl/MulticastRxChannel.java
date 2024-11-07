@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Ye Weibin. All rights reserved.
+ * Copyright (c) M2TK Project. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,7 +50,7 @@ final class MulticastRxChannel implements RxChannel
             }
         }
         if (usableInterface == null)
-            throw new IllegalArgumentException("No usable network interface");
+            throw new IllegalArgumentException("没有可用的网络接口");
 
         socketAddress = new InetSocketAddress(address, port);
         networkInterface = usableInterface;
@@ -110,7 +110,7 @@ final class MulticastRxChannel implements RxChannel
     private void doSetTimeout(Object[] arguments) throws IOException
     {
         if (arguments.length == 0)
-            throw new IllegalArgumentException("Requires at least one argument: <timeout>");
+            throw new IllegalArgumentException("缺少必要参数");
 
         Object arg = arguments[0];
 
@@ -123,7 +123,7 @@ final class MulticastRxChannel implements RxChannel
             value = Integer.parseInt((String) arg);
 
         if (value < 0)
-            throw new IllegalArgumentException("Invalid timeout: " + arg);
+            throw new IllegalArgumentException("无效超时：" + arg);
         timeout = value;
         socket.setSoTimeout(timeout);
     }
@@ -132,12 +132,10 @@ final class MulticastRxChannel implements RxChannel
     public int read(byte[] buffer, int offset, int length) throws IOException
     {
         if (socket.isClosed())
-            throw new IOException("Channel closed");
+            throw new IOException("通道已关闭");
 
-        if (buffer == null)
-            throw new NullPointerException("Buffer is null");
         if (offset < 0 || buffer.length - offset < length)
-            throw new IllegalArgumentException("Invalid offset: " + offset);
+            throw new IllegalArgumentException("无效的偏移量：" + offset);
 
         int received = 0;
         int toRead = length;

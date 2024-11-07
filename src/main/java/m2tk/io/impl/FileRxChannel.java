@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Ye Weibin. All rights reserved.
+ * Copyright (c) M2TK Project. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,10 +77,10 @@ final class FileRxChannel implements RxChannel
     public int read(byte[] buffer, int offset, int length) throws IOException
     {
         if (closed)
-            throw new IOException("Channel closed");
+            throw new IOException("通道已关闭");
 
         if (offset < 0 || buffer.length - offset < length)
-            throw new IllegalArgumentException("Invalid offset: " + offset);
+            throw new IllegalArgumentException("无效的偏移量：" + offset);
 
         int nRead = file.read(buffer, offset, length);
         if (nRead == -1 && rewindEnabled)
@@ -105,7 +105,7 @@ final class FileRxChannel implements RxChannel
     private void doSync() throws IOException
     {
         if (closed)
-            throw new IOException("Channel closed");
+            throw new IOException("通道已关闭");
 
         int c = 0;
         while (c < 5)
@@ -130,8 +130,8 @@ final class FileRxChannel implements RxChannel
 
     private void doSetRewind(Object[] arguments)
     {
-        if (arguments.length != 1)
-            throw new IllegalArgumentException("Command 'rewind' requires one argument: [true|false]");
+        if (arguments.length == 0)
+            throw new IllegalArgumentException("缺少必要参数");
 
         Object arg = arguments[0];
         if (arg instanceof Boolean)
@@ -139,6 +139,6 @@ final class FileRxChannel implements RxChannel
         else if (arg instanceof String)
             rewindEnabled = Boolean.parseBoolean((String) arg);
         else
-            throw new IllegalArgumentException("Invalid 'rewind' argument: " + arguments[0]);
+            throw new IllegalArgumentException("无效参数：" + arguments[0]);
     }
 }

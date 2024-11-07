@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Ye Weibin. All rights reserved.
+ * Copyright (c) M2TK Project. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,15 +24,12 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.UnknownHostException;
-import java.util.Objects;
 
 public class MulticastProtocol implements Protocol
 {
     @Override
     public boolean accepts(String resource)
     {
-        Objects.requireNonNull(resource, "resource should not be null");
-
         URI uri = URI.create(resource);
         String scheme = uri.getScheme();
         if ((scheme == null) || !scheme.equalsIgnoreCase("udp"))

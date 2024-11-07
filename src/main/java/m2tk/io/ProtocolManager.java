@@ -1,5 +1,5 @@
 /*
- * Copyright (c) Ye Weibin. All rights reserved.
+ * Copyright (c) M2TK Project. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ public final class ProtocolManager
 
     public static RxChannel openRxChannel(String resource)
     {
-        Objects.requireNonNull(resource, "resource should not be null");
+        Objects.requireNonNull(resource, "资源描述为空");
 
         for (Protocol protocol : PROTOCOLS)
         {
@@ -58,12 +58,12 @@ public final class ProtocolManager
             }
         }
 
-        throw new IllegalArgumentException(String.format("当前没有协议能为资源[%s]创建输入通道。", resource));
+        throw new IllegalArgumentException("当前没有协议能为指定资源创建输入通道");
     }
 
     public static TxChannel openTxChannel(String resource)
     {
-        Objects.requireNonNull(resource);
+        Objects.requireNonNull(resource, "资源描述为空");
 
         for (Protocol protocol : PROTOCOLS)
         {
@@ -77,12 +77,12 @@ public final class ProtocolManager
             }
         }
 
-        throw new IllegalArgumentException(String.format("当前没有协议能为资源[%s]创建输出通道。", resource));
+        throw new IllegalArgumentException("当前没有协议能为指定资源创建输出通道");
     }
 
     public static Protocol getProtocol(String resource)
     {
-        Objects.requireNonNull(resource);
+        Objects.requireNonNull(resource, "资源描述为空");
 
         for (Protocol protocol : PROTOCOLS)
         {
@@ -96,6 +96,6 @@ public final class ProtocolManager
             }
         }
 
-        throw new IllegalArgumentException(String.format("当前没有协议认可资源[%s]", resource));
+        throw new IllegalArgumentException("当前没有协议认可指定资源");
     }
 }
