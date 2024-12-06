@@ -22,26 +22,27 @@ import m2tk.io.TxChannel;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 
 public final class FileProtocol implements Protocol
 {
     @Override
     public boolean accepts(String resource)
     {
-        // 文件路径在创建通道时再进行判断，不再要求必须符合URI格式。
-        return true;
+        URI uri = URI.create(resource);
+        return "file".equalsIgnoreCase(uri.getScheme());
     }
 
     @Override
     public RxChannel openRxChannel(String resource) throws IOException
     {
-        return new FileRxChannel(new File(resource));
+        return new FileRxChannel(new File(URI.create(resource)));
     }
 
     @Override
     public TxChannel openTxChannel(String resource) throws IOException
     {
-        return new FileTxChannel(new File(resource));
+        return new FileTxChannel(new File(URI.create(resource)));
     }
 
     @Override

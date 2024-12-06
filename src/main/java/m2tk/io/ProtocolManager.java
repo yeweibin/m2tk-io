@@ -52,9 +52,9 @@ public final class ProtocolManager
             {
                 if (protocol.accepts(resource))
                     return protocol.openRxChannel(resource);
-            } catch (Exception ignored)
+            } catch (Exception ex)
             {
-                // ignored
+                ex.printStackTrace(System.err);
             }
         }
 
@@ -71,9 +71,9 @@ public final class ProtocolManager
             {
                 if (protocol.accepts(resource))
                     return protocol.openTxChannel(resource);
-            } catch (Exception ignored)
+            } catch (Exception ex)
             {
-                // ignored
+                ex.printStackTrace(System.err);
             }
         }
 

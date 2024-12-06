@@ -32,7 +32,7 @@ public class MulticastProtocol implements Protocol
     {
         URI uri = URI.create(resource);
         String scheme = uri.getScheme();
-        if ((scheme == null) || !scheme.equalsIgnoreCase("udp"))
+        if (!"udp".equalsIgnoreCase(uri.getScheme()))
             return false;
         String host = uri.getHost();
         int port = uri.getPort();
