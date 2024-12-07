@@ -54,6 +54,8 @@ final class MulticastTxChannel implements TxChannel
         while (enumeration.hasMoreElements())
         {
             NetworkInterface nif = enumeration.nextElement();
+            if (nif.isLoopback() || nif.isVirtual() || nif.isPointToPoint())
+                continue;
             if (nif.isUp() && nif.supportsMulticast() &&
                 nif.inetAddresses().anyMatch(addr -> addr instanceof Inet4Address))
             {
