@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package m2tk.io.impl;
 
 import m2tk.io.TxChannel;
@@ -55,9 +54,8 @@ final class MulticastTxChannel implements TxChannel
         while (enumeration.hasMoreElements())
         {
             NetworkInterface nif = enumeration.nextElement();
-            if (nif.isLoopback() || nif.isVirtual() || nif.isPointToPoint())
-                continue;
-            if (nif.isUp() && nif.supportsMulticast())
+            if (nif.isUp() && nif.supportsMulticast() &&
+                nif.inetAddresses().anyMatch(addr -> addr instanceof Inet4Address))
             {
                 usableInterface = nif;
                 break;
