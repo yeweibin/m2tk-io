@@ -175,7 +175,10 @@ final class MulticastRxChannel implements RxChannel
     @Override
     public void close() throws IOException
     {
-        socket.leaveGroup(socketAddress, networkInterface);
-        socket.close();
+        if (!socket.isClosed())
+        {
+            socket.leaveGroup(socketAddress, networkInterface);
+            socket.close();
+        }
     }
 }
