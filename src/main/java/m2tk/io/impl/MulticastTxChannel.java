@@ -25,6 +25,7 @@ import java.util.Enumeration;
 final class MulticastTxChannel implements TxChannel
 {
     private static final int FRAME_SIZE = 188 * 7; // 一个UDP报文里最多放7个TS包
+    private final String uri;
     private final MulticastSocket socket;
     private final DatagramPacket packet;
     private final SocketAddress socketAddress;
@@ -49,6 +50,10 @@ final class MulticastTxChannel implements TxChannel
 
     MulticastTxChannel(String address, Integer port) throws IOException
     {
+        uri = "udp://" + address + ":" + port;
+        socket = new MulticastSocket(port);
+        socketAddress = new InetSocketAddress(address, port);
+
         NetworkInterface usableInterface = null;
         Enumeration<NetworkInterface> enumeration = NetworkInterface.getNetworkInterfaces();
         while (enumeration.hasMoreElements())
@@ -59,23 +64,49 @@ final class MulticastTxChannel implements TxChannel
             if (nif.isUp() && nif.supportsMulticast() &&
                 nif.inetAddresses().anyMatch(addr -> addr instanceof Inet4Address))
             {
-                usableInterface = nif;
-                break;
+                try
+                {
+                    socket.joinGroup(socketAddress, nif);
+                    usableInterface = nif;
+                    break;
+                } catch (IOException ex)
+                {
+                    System.err.printf("Can not join multicast group with NIF[%s], pass.%n", nif.getDisplayName());
+                }
             }
         }
         if (usableInterface == null)
             throw new IllegalArgumentException("没有可用的网络接口");
 
-        socketAddress = new InetSocketAddress(address, port);
+        System.out.printf("Join multicast group[%s] with NIF[%s].%n", uri, usableInterface.getDisplayName());
+
         networkInterface = usableInterface;
-
-        socket = new MulticastSocket(port);
-        socket.joinGroup(socketAddress, networkInterface);
-
         packet = new DatagramPacket(new byte[FRAME_SIZE], FRAME_SIZE, socketAddress);
         bitrate = -1;
         buf = new byte[FRAME_SIZE * 10];
         resetBuffer();
+    }
+
+    @Override
+    public boolean hasProperty(String property)
+    {
+        return "target name".equals(property) || "bitrate".equals(property);
+    }
+
+    @Override
+    public String[] getPropertyList()
+    {
+        return new String[]{"target name", "bitrate"};
+    }
+
+    @Override
+    public Object query(String property)
+    {
+        if ("target name".equals(property))
+            return uri;
+        if ("bitrate".equals(property))
+            return bitrate;
+        return null;
     }
 
     @Override

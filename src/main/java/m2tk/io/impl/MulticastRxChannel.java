@@ -35,6 +35,13 @@ final class MulticastRxChannel implements RxChannel
 
     MulticastRxChannel(String address, int port) throws IOException
     {
+        uri = "udp://" + address + ":" + port;
+        timeout = 30000; // 30s
+        socket = new MulticastSocket(port);
+        socket.setSoTimeout(timeout);
+        socket.setReceiveBufferSize(10 * 1024 * 1024); // 10MB缓存，以应对高码率输入，减少丢包概率。
+        socketAddress = new InetSocketAddress(address, port);
+
         NetworkInterface usableInterface = null;
         Enumeration<NetworkInterface> enumeration = NetworkInterface.getNetworkInterfaces();
         while (enumeration.hasMoreElements())
@@ -45,25 +52,25 @@ final class MulticastRxChannel implements RxChannel
             if (nif.isUp() && nif.supportsMulticast() &&
                 nif.inetAddresses().anyMatch(addr -> addr instanceof Inet4Address))
             {
-                usableInterface = nif;
-                break;
+                try
+                {
+                    socket.joinGroup(socketAddress, nif);
+                    usableInterface = nif;
+                    break;
+                } catch (IOException ex)
+                {
+                    System.err.printf("Can not join multicast group with NIF[%s], pass.%n", nif.getDisplayName());
+                }
             }
         }
         if (usableInterface == null)
             throw new IllegalArgumentException("没有可用的网络接口");
 
-        socketAddress = new InetSocketAddress(address, port);
+        System.out.printf("Join multicast group[%s] with NIF[%s].%n", uri, usableInterface.getDisplayName());
+
         networkInterface = usableInterface;
-
-        uri = "udp://" + address + ":" + port;
-        socket = new MulticastSocket(port);
-        socket.joinGroup(socketAddress, networkInterface);
-
         packet = new DatagramPacket(new byte[BUFFER_SIZE], BUFFER_SIZE);
-        timeout = 30000; // 30s
         packetReadOffset = BUFFER_SIZE;
-        socket.setSoTimeout(timeout);
-        socket.setReceiveBufferSize(10 * 1024 * 1024); // 10MB缓存，以应对高码率输入，减少丢包概率。
     }
 
     @Override
