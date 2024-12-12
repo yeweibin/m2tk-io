@@ -48,7 +48,7 @@ final class MulticastTxChannel implements TxChannel
                                 // continuity_counter: 1111
     }
 
-    MulticastTxChannel(String address, Integer port) throws IOException
+    MulticastTxChannel(String address, int port) throws IOException
     {
         uri = "udp://" + address + ":" + port;
         socket = new MulticastSocket(port);
@@ -96,7 +96,7 @@ final class MulticastTxChannel implements TxChannel
     @Override
     public String[] getPropertyList()
     {
-        return new String[]{"target name", "bitrate"};
+        return new String[]{"target name", "bitrate", "nif"};
     }
 
     @Override
@@ -106,6 +106,8 @@ final class MulticastTxChannel implements TxChannel
             return uri;
         if ("bitrate".equals(property))
             return bitrate;
+        if ("nif".equals(property))
+            return networkInterface.getDisplayName();
         return null;
     }
 

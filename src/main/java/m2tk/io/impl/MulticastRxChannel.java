@@ -82,7 +82,7 @@ final class MulticastRxChannel implements RxChannel
     @Override
     public String[] getPropertyList()
     {
-        return new String[]{"source name", "timeout"};
+        return new String[]{"source name", "timeout", "nif"};
     }
 
     @Override
@@ -92,6 +92,8 @@ final class MulticastRxChannel implements RxChannel
             return uri;
         if ("timeout".equals(property))
             return timeout;
+        if ("nif".equals(property))
+            return networkInterface.getDisplayName();
         return null;
     }
 
